@@ -1,4 +1,4 @@
-import { hexToU8a } from '@polkadot/util'
+import { hexToU8a, u8aToHex } from '@polkadot/util'
 import type { HexString } from '@polkadot/util/types'
 
 import { type Handler, ResponseError } from '../shared.js'
@@ -21,7 +21,7 @@ export const payment_queryFeeDetails: Handler<[HexString, HexString], HexString>
   const tx = hexToU8a(extrinsic)
   const resp = await block.call('TransactionPaymentApi_query_fee_details', [
     registry.createType('Extrinsic', tx).toHex(),
-    registry.createType('u32', tx.byteLength).toHex(),
+    u8aToHex(registry.createType('u32', tx.byteLength).toU8a()),
   ])
   return resp.result
 }
@@ -41,7 +41,7 @@ export const payment_queryInfo: Handler<[HexString, HexString], HexString> = asy
   const tx = hexToU8a(extrinsic)
   const resp = await block.call('TransactionPaymentApi_query_info', [
     registry.createType('Extrinsic', tx).toHex(),
-    registry.createType('u32', tx.byteLength).toHex(),
+    u8aToHex(registry.createType('u32', tx.byteLength).toU8a()),
   ])
   return resp.result
 }
